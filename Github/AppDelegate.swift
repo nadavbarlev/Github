@@ -7,15 +7,58 @@
 //
 
 import UIKit
+import Firebase
+import Swinject
+import SwinjectStoryboard
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // MARK: Properties
     var window: UIWindow?
-
+    var container: Container!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // Swinject - Registrations
+        container = Container { (container: Container) in
+            
+            // Models
+            container.register(ProtocolGithubService.self) { resolver in
+                GithubService()
+            }
+            
+            container.register(ProtocolCommentService.self) { resolver in
+                CommentService()
+            }
+            
+            // View-Models
+            container.register(ProtocolSearchViewControllerVM.self) { resolver in
+                SearchViewControllerVM(githubService: resolver.resolve(ProtocolGithubService.self)!,
+                                      commentService: resolver.resolve(ProtocolCommentService.self)!)
+            }
+            
+            // Views
+            container.storyboardInitCompleted(UINavigationController.self) { _, _ in }
+            container.storyboardInitCompleted(ProfileViewController.self) { _, _ in }
+            container.storyboardInitCompleted(CommentsViewController.self) { _, _ in }
+            container.storyboardInitCompleted(SearchViewController.self) { resolver, controller in
+                controller.viewModel = resolver.resolve(ProtocolSearchViewControllerVM.self)!
+            }
+        }
+        
+        // Swinject - Create Swinject Storyboard
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.backgroundColor = .white
+        window?.makeKeyAndVisible()
+        let storyboard = SwinjectStoryboard.create(name: "Main",
+                                                 bundle: Bundle(for: SearchViewController.self),
+                                              container: container)
+        window?.rootViewController = storyboard.instantiateInitialViewController()
+        
+        // Firebase - Configuration
+        FirebaseApp.configure()
+       
         return true
     }
 
