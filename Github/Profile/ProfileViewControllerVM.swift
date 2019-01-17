@@ -12,13 +12,13 @@ import RxCocoa
 
 protocol ProtocolProfileViewControllerVM {
     
-    // MARK: Properties - View to Model
+    // MARK: Properties - View to VM
     var showCommentsDidTap: PublishSubject<Void> { get }
     
-    // MARK: Properties - Model to View
+    // MARK: Properties - VM to View
     var presentCommentVC: Observable<ProtocolCommentsViewControllerVM> { get }
     var image: Observable<UIImage> { get }
-    var username: String { get }
+    var username: String { get }  
 }
 
 class ProfileViewControllerVM: ProtocolProfileViewControllerVM {

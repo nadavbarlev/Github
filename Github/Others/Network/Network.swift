@@ -7,7 +7,6 @@
 //
 
 import RxSwift
-import RxCocoa
 import Alamofire
 
 // MARK: Network Protocol

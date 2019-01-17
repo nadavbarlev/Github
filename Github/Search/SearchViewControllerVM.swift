@@ -11,11 +11,11 @@ import RxCocoa
 
 protocol ProtocolSearchViewControllerVM {
     
-    // MARK: Properties - View to Model
+    // MARK: Properties - View to ViewModel
     var searchText: PublishSubject<String> { get }
     var cellDidSelect: PublishSubject<Int> { get }
     
-    // MARK: Properties - Model to View
+    // MARK: Properties - ViewModel to View
     var cellsModel: Observable<[UserTableViewCellVM]> { get }
     var resultCount: Observable<String> { get }
     var presentProfileVC: Observable<ProtocolProfileViewControllerVM> { get }
@@ -53,7 +53,7 @@ class SearchViewControllerVM: ProtocolSearchViewControllerVM {
         }
         
         resultCount = searchResults.map { (githubUserSearch: GithubUserSearch) in
-            String(format: "%d results", githubUserSearch.count)
+            String(format: "%d Result(s)", githubUserSearch.count)
         }
         
         presentProfileVC = cellDidSelect

@@ -26,6 +26,11 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         
         // Binding Configuration
+        tableViewUsers.rx.itemSelected
+            .map { $0.row }
+            .bind(to: viewModel.cellDidSelect)
+            .disposed(by: disposeBag)
+        
         searchBar.rx.text.orEmpty
             .bind(to: viewModel.searchText)
             .disposed(by: disposeBag)
@@ -47,11 +52,6 @@ class SearchViewController: UIViewController {
                 profileVC.viewModel = profileViewControllerVM
                 self.navigationController?.pushViewController(profileVC, animated: true)
             }).disposed(by: disposeBag)
-        
-        tableViewUsers.rx.itemSelected
-            .map { $0.row }
-            .bind(to: viewModel.cellDidSelect)
-            .disposed(by: disposeBag)
         
         tableViewUsers.rx.contentOffset
             .subscribe(onNext: { [weak self] _ in

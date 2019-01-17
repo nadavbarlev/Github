@@ -10,9 +10,10 @@ import RxSwift
 
 protocol ProtocolCommentsViewControllerVM {
     
-    // MARK: Properties - Model to View [Observables]
+    // MARK: Properties - VM to View [Observables]
     var cellsModel: Observable<[String]> { get }
     var submitEnabled: Observable<Bool> { get }
+    var clearText: Observable<Void> { get }
     
     // MARK: Properties - View to Model [Observers]
     var submitDidTap: PublishSubject<Void> { get }
@@ -24,11 +25,12 @@ class CommentsViewControllerVM: ProtocolCommentsViewControllerVM {
     // MARK: Properties
     let disposeBag = DisposeBag()
     
-    // MARK: Properties - Model to View [Observables]
+    // MARK: Properties - VM to View [Observables]
     let cellsModel: Observable<[String]>
     let submitEnabled: Observable<Bool>
+    let clearText: Observable<Void>
     
-    // MARK: Properties - View to Model [Observers]
+    // MARK: Properties - View to VM [Observers]
     let submitDidTap = PublishSubject<Void>()
     let textComment = PublishSubject<String>()
     
@@ -46,5 +48,7 @@ class CommentsViewControllerVM: ProtocolCommentsViewControllerVM {
             .subscribe(onNext: { (text: String) in
                 commentService.comment(text, for: username)
             }).disposed(by: disposeBag)
+        
+        clearText = submitDidTap
     }
 }

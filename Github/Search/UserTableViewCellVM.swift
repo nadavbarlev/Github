@@ -8,22 +8,22 @@
 
 import RxSwift
 
+
 class UserTableViewCellVM {
     
     // MARK: Constants
     let placeholder = UIImage(imageLiteralResourceName: "user_placeholder")
     
-    // MARK: Properties - Model to View
+    // MARK: Properties - VM to View
     let image: Observable<UIImage>
     let username: String
     
     // MARK: Constructor    
     init(imageURL: String, username: String) {
-        
-        let userImage = Network.image(url: imageURL)
         self.username = username
+        let userImage = Network.image(url: imageURL)
         self.image = Observable.just(placeholder)
-            .concat(userImage)
+                        .concat(userImage)
     }
     
 }

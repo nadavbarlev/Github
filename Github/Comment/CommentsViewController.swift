@@ -44,6 +44,12 @@ class CommentsViewController: UIViewController {
                 return cell
             }.disposed(by: disposeBag)
         
+        viewModel.clearText
+            .subscribe(onNext: {
+                self.textFieldComment.text = ""
+            }).disposed(by: disposeBag)
+        
+        
         tableViewComments.rx.didScroll
             .subscribe(onNext: { [weak self] _ in
                 self?.textFieldComment.resignFirstResponder()
